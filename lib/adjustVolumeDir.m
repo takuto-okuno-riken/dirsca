@@ -15,10 +15,10 @@ function V = adjustVolumeDir(V, info)
         return;
     end
     if info.Transform.T(1,1) < 0   % check flip X axis
-        V = fliplr(V);
+        V = flipud(V);
     end
     if info.Transform.T(2,2) < 0   % check flip Y axis
-        V = flipud(V);
+        V = fliplr(V);
     end
     if info.Transform.T(3,3) < 0   % check flip Z axis
         V = flip(V,3);

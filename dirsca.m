@@ -313,7 +313,7 @@ function processInputFiles(handles)
     if ~isempty(handles.nuisance), nstr=['-' handles.nuisance]; else, nstr=''; end
 
     % process each file (extract ROI time-series)
-    CX = {}; names = {};
+    CX = {}; names = {}; TR = 0;
     if handles.full == 0, CS = {}; else, CS = []; end
     for i = 1:N
         % load NIfTI files
@@ -325,7 +325,6 @@ function processInputFiles(handles)
         end
         for k=1:length(flist)
             % init data
-            TR = 0;
             X = [];
 
             fname = [flist(k).folder filesep flist(k).name];
@@ -457,7 +456,7 @@ function processInputFiles(handles)
                 CX{end+1} = [cachename '.mat'];
                 if handles.full == 0, CS{end+1} = [cachename '-' seedName '.mat']; end
             else
-                CX{end+1} = fx.X;
+                CX{end+1} = fx.X; TR = fx.TR;
                 if handles.full == 0, CS{end+1} = fs.X; end
             end
             names{end+1} = name;
@@ -477,26 +476,30 @@ function processInputFiles(handles)
             delete(gcp('nocreate')); % shutdown pools
             if handles.poolnum > 0, parpool(handles.poolnum); end % set pool num
             [B2, RSS2, T2, df, R] = calcSeedCorrMixed(CX, CS, handles.cachepath, idStr);
+
+            % currently recels estimation is supported only for full mask mode.
             recels = {}; FWHMs = {};
-            if isempty(CS) % full mode
-                T = triu(ones(nodeNum,nodeNum,'single'));
-                idx = uint32(find(T==1));
-                T(idx) = RSS2;
-                RSS2 = T' + triu(T,1);
-                R2 = zeros(nodeNum,nodeNum,length(CX),'single');
-                for i=1:length(CX)
-                    R3 = zeros(nodeNum,nodeNum,'single');
-                    R3(idx) = R(:,i);
-                    R3 = R3' + triu(R3,1);
-                    R2(:,:,i) = R3;
+            if ismask 
+                if isempty(CS) % full mode
+                    T = triu(ones(nodeNum,nodeNum,'single'));
+                    idx = uint32(find(T==1));
+                    T(idx) = RSS2;
+                    RSS2 = T' + triu(T,1);
+                    R2 = zeros(nodeNum,nodeNum,length(CX),'single');
+                    for i=1:length(CX)
+                        R3 = zeros(nodeNum,nodeNum,'single');
+                        R3(idx) = R(:,i);
+                        R3 = R3' + triu(R3,1);
+                        R2(:,:,i) = R3;
+                    end
+                    R=R2; clear R2; clear T; clear R3;
+                else % seed mode
+                    RSS2 = reshape(RSS2,nodeNum,seedNum);
+                    R = reshape(R,nodeNum,seedNum,[]);
                 end
-                R=R2; clear R2; clear T; clear R3;
-            else % seed mode
-                RSS2 = reshape(RSS2,nodeNum,seedNum);
-                R = reshape(R,nodeNum,seedNum,[]);
-            end
-            for i=1:length(CX)
-                [recels{i}, FWHMs{i}] = estimateSmoothFWHM(squeeze(R(:,i,:)), RSS2(:,i), df, atlasV);
+                for i=1:length(CX)
+                    [recels{i}, FWHMs{i}] = estimateSmoothFWHM(squeeze(R(:,i,:)), RSS2(:,i), df, atlasV);
+                end
             end
         
             % output T2 matrix
@@ -505,6 +508,8 @@ function processInputFiles(handles)
         end
     
         T2(T2>1e+3) = Inf; % treat as Inf
+        T2(T2<-1e+3) = -Inf; % treat as -Inf
+
         figure; imagesc(log10(abs(T2))); colorbar;
         title(['non-directional SCA result (log10(|T-value|) matrix) of ' names{1}]);
         xlabel('Seed ROIs'); ylabel('Target voxels'); colorbar;
@@ -520,10 +525,10 @@ function processInputFiles(handles)
         else
             % find optimal spot time lag (3-4 sec for human)
             if handles.lags == 0
-                if contains(atlasFile, 'human')
-                    handles.lags = floor(4 / TR); % human case
-                else 
+                if ~contains(atlasFile, 'human') || TR == 0
                     handles.lags = 1; % unknown species
+                else 
+                    handles.lags = floor(4 / TR); % human case
                 end
             end
 
