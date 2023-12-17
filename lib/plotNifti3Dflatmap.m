@@ -69,6 +69,7 @@ function crange = plotNifti3Dflatmap(V, maskV, isFullVoxel, flatXY, gRate, crang
     % show plot
     if ~isempty(zeroColor), clr(1,:) = zeroColor; % might be 0 group
     else, clr(1,:) = clr(2,:); end
+    colormap(cmap);
     gscatter(flatXY(:,1),flatXY(:,2),Vidx,clr);
     set(gca,'Color',bkColor);
     legend('off'); daspect([1 1 1]);
