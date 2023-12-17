@@ -1,7 +1,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-success.svg)](https://opensource.org/licenses/MIT)
 
 # DirSCA and FFM toolbox
-Directional SCA (Seed-based connecvitivy analysis) and Functional flat mapping toolbox for MATLAB
+Directional SCA (Seed-based connectivity analysis) and Functional flat mapping toolbox for MATLAB
 
 ## Introduction
 TODO:
@@ -10,17 +10,17 @@ TODO:
 
 | name | description |
 |:---|:---|
-| dirsca | Calculate and plot MTESS for a group of multivariate time-series data. |
-| dummy | Generate a group surrogate model (VAR, PCVAR, VARDNN surrogate) and (multivariate time-series) group surrogate data.|
+| dirsca | Calculate directional and non-directional Seed-based connectivity analysis. |
+| flatmap | Plot functional flat mapping. |
+| plotsca | Plot SCA result with background image.|
 
 ## Requirements: Software
 * MATLAB R2019b or later
-* Fuzzy Logic Toolbox ver2.6 or later
-* Econometrics Toolbox ver5.3 or later
+* Image Processing Toolbox ver11.0 or later
 * Parallel Computing Toolbox ver7.1 or later
 * [VARDNN Toolbox](https://github.com/takuto-okuno-riken/vardnn)
 
-Please download the [VARDNN Toolbox](https://github.com/takuto-okuno-riken/vardnn) and "Add Path" in the MATLAB before using GSDGM and MTESS Toolbox.
+Please download the [VARDNN Toolbox](https://github.com/takuto-okuno-riken/vardnn) and "Add Path" in the MATLAB before using DirSCA and FFM Toolbox.
 
 
 ## Installation
