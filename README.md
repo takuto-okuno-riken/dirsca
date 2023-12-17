@@ -31,10 +31,77 @@ Please download the [VARDNN Toolbox](https://github.com/takuto-okuno-riken/vardn
 
 ## Command Line Tools Demos
 <b>Demo 1</b><br>
-The first demo shows the calculation of MTESS among time-series data and figure output.<br>
-(Copy and paste this command line. Demo data is included in GSDGM and MTESS Toolbox.)
+The first demo shows plotting functional flat mapping of a human default mode network (DMN) component calculated by group ICA.<br>
+(Copy and paste this command line. Demo data is included in DirSCA and FFM Toolbox.)
 ~~~
->> dirsca --showinsig --showmat --showsig --showprop --shownode data/cx-8x500-demo-surrogate.mat 
-...
-output mat file : results/cx-8x500-demo-surrogate_mtess.mat
+>> flatmap data/zstat_DMN.nii.gz --cmap hot --backdot 0.1 0.1 0.1
+load functional flat map definition : data/human_ffm_cubeRoi2.mat
+load voxel mask : data/human_2mm_cubeRoi2.nii.gz
+read NIfTI file : zstat_DMN
+color range=[0 12.2829]
 ~~~
+This demo plots functional flat mapping of the human DMN:
+<div align="center">
+<img src="data/demo1.jpg" height="480">
+</div>
+
+
+## Command Line Tools Reference
+<b>dirsca command</b><br>
+~~~
+>> dirsca -h
+usage: dirsca [options][-d][-n][-f][-s seed.nii.gz] file1.nii.gz ...
+  -d                  perform directional seed-based connectivity analysis
+  -n                  perform non-directional seed-based connectivity analysis
+  -f, --full          full voxel connectivity analysis
+  -s, --seed file     NIfTI <file> of seed ROI voxels
+  --compseed          seed is 4D component file
+  --atlas file        NIfTI <file> of target ROI voxels (default: data/human_2mm_cubeRoi2.nii.gz)
+  --mask file         NIfTI <file> of target mask (full voxel) for seed analysis (Preferred over atlas option)
+  --list file         text <file> of subject NIfTI file list
+  --rmframe num       remove first <num> frames (default: 10)
+  --smooth x y z      gaussian kernel smoothing FWHM=[x y z] voxels (default: off)
+  --nui algo          nuisance factor removal method (default: "gmacomp")
+  --compnum num       component number for aCompCor (default: 6)
+  --nuibr file        brain mask NIfTI <file> for global signal of nuisance factor removal (default: data/human_2mm_brain_mask.nii.gz)
+  --nuiwm file        white matter mask NIfTI <file> for wm-mean of nuisance factor removal (default: data/human_2mm_wm.nii.gz)
+  --nuicsf file       csf mask NIfTI <file> for csf-mean of nuisance factor removal (default: data/human_2mm_csf.nii.gz)
+  --highpass freq     high-pass NIfTI <freq> Hz (default: off)
+  --lags num          spot time lag for directional SCA (default: auto)
+  --rankmeth type     ranking method for directional SCA (default: "exact")
+  --outpath path      output files <path> (default:"results")
+  --cachepath path    cache path <path> (default:"results/cache")
+  --showsig           show processed time-series of input NIfTI file
+  --showras           show raster plot of processed time-series of input NIfTI file
+  --nocache           do not use cache file for conversion
+  --pool num          working pool number for parallel calculation
+  -v, --version       show version number
+  -h, --help          show command line help
+~~~
+The input files should be NIfTI format, or text file which includes list of NIfTI files can be specified by --list option.
+Calculation result will be saved in <outpath>.
+
+## 
+<b>flatmap command</b><br>
+~~~
+>> flatmap -h
+usage: flatmap [options] file1.nii.gz ...
+  --atlas file        NIfTI <file> of target ROI voxels (default: data/human_2mm_cubeRoi2.nii.gz)
+  --mask file         NIfTI <file> of target mask (full voxel) (Preferred over atlas option)
+  --flatmap file      functional flat map definition <file>(default: data/human_ffm_cubeRoi2.mat)
+  --range min max     T-value/Z-score color range for image plot
+  --cmap type         color map type for image plot (default: "hot")
+  --cmap type         color map type for image plot (default: "hot")
+  --backdot r g b     background dot color (default: [])
+  --backgr r g b      background color (default: 0 0 0)
+  -v, --version       show version number
+  -h, --help          show command line help
+~~~
+The input files should be NIfTI format.
+
+## Citing DirSCA and FFM toolbox
+If you find DirSCA and FFM Toolbox useful in your research, please cite it as follows: 
+
+Takuto Okuno, Junichi Hata, Hideyuki Okano, Alexander Woodward (in submission)
+["Directional and non-directional seed-based connectivity analysis of resting-state fMRI in the human and marmoset"](https://www.yahoo.com/), in submission
+
