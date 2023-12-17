@@ -44,18 +44,24 @@ function P = statsrexactMat(V, W)
     folded = (W > maxw/2);
     W = W .* (1-folded) + (maxw-W) .* folded;
 
+    CV = cell(1,size(V,2));
+    CW = cell(1,size(V,2));
+    CP = cell(1,size(V,2));
     tc = tic;
-    P = nan(1,size(V,2));
-    parfor i=1:length(P)
-        v = V(:,i)'; % make sure it's a row
-        w = W(i);
-        if isnan(w), continue; end
+    for i=1:length(CV), CV{i} = V(:,i)'; CW{i} = W(i); end
+    clear V; clear W;
+%    for i=1:length(CV)
+    parfor i=1:length(CV)
+        if isnan(CW{i}), continue; end
+        v = CV{i}; % make sure it's a row
+        w = CW{i};
 
         % multiply by 2 to force everything to integer.
         if any(v~=floor(v))
             v = round(2*v);
             w = round(2*w);
         end
+
         C = zeros(w+1,1);
         C(1) = 1; top = 1;
         for vj=v(v<=w)
@@ -67,8 +73,11 @@ function P = statsrexactMat(V, W)
            top = newtop;
         end
         C = C / (2^n);
-        P(i) = sum(C); % Get tail probability
+        CP{i} = sum(C); % Get tail probability
     end
+    P = nan(1,length(CP));
+    for i=1:length(CP), if(~isempty(CP{i})), P(i) = CP{i}; end; end
+
     t = toc(tc);
     disp(['statsrexactMat t=' num2str(t)]);
 end
