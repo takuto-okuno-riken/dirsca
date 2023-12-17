@@ -11,7 +11,7 @@
 %  zeroColor    group 'zero' color (default: [])
 %  bkColor      background color (default: [0 0 0])
 
-function plotNifti3Dflatmap(V, maskV, isFullVoxel, flatXY, gRate, crange, cmap, zeroColor, bkColor)
+function crange = plotNifti3Dflatmap(V, maskV, isFullVoxel, flatXY, gRate, crange, cmap, zeroColor, bkColor)
     if nargin < 9, bkColor = [0 0 0]; end
     if nargin < 8, zeroColor = []; end
     if nargin < 7, cmap = hot; end
