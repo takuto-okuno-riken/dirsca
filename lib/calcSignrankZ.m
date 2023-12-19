@@ -44,15 +44,34 @@ function P = statsrexactMat(V, W)
     folded = (W > maxw/2);
     W = W .* (1-folded) + (maxw-W) .* folded;
 
-    CV = cell(1,size(V,2));
-    CW = cell(1,size(V,2));
-    CP = cell(1,size(V,2));
+    % do not calculate full voxels, find unique pattern of inputs
     tc = tic;
-    for i=1:length(CV), CV{i} = V(:,i)'; CW{i} = W(i); end
+    U = unique(W); U(isnan(U))=[];
+    V2 = V - (1:size(V,1))';
+    V2 = V2 .* (1:size(V,1))';
+    W2 = sum(abs(V2),1);
+    clear V2;
+
+    CV = {};
+    CW = {};
+    CIdx = {};
+    for i=1:length(U)
+        idx = find(W==U(i)); % unique pattern of W
+        W2i = W2(idx);
+        U2 = unique(W2i); U2(isnan(U2))=[];
+        for j=1:length(U2)
+            idx2 = find(W2i==U2(j)); % unique pattern of V within W==U(i)
+
+            % check first one
+            CV{end+1} = V(:,idx(idx2(1)))'; % make sure it's a row;
+            CW{end+1} = W(idx(idx2(1)));
+            CIdx{end+1} = idx(idx2(:));
+        end
+    end
     clear V; clear W;
-%    for i=1:length(CV)
+    CP = cell(1,length(CV));
     parfor i=1:length(CV)
-        if isnan(CW{i}), continue; end
+        % check first one
         v = CV{i}; % make sure it's a row
         w = CW{i};
 
@@ -61,7 +80,6 @@ function P = statsrexactMat(V, W)
             v = round(2*v);
             w = round(2*w);
         end
-
         C = zeros(w+1,1);
         C(1) = 1; top = 1;
         for vj=v(v<=w)
@@ -75,9 +93,35 @@ function P = statsrexactMat(V, W)
         C = C / (2^n);
         CP{i} = sum(C); % Get tail probability
     end
-    P = nan(1,length(CP));
-    for i=1:length(CP), if(~isempty(CP{i})), P(i) = CP{i}; end; end
+    P = nan(1,length(W2));
+    for i=1:length(CP)
+        P(CIdx{i}) = CP{i};
+    end
+%{
+    parfor i=1:length(P)
+        v = V(:,i)'; % make sure it's a row
+        w = W(i);
+        if isnan(w), continue; end
 
+        % multiply by 2 to force everything to integer.
+        if any(v~=floor(v))
+            v = round(2*v);
+            w = round(2*w);
+        end
+        C = zeros(w+1,1);
+        C(1) = 1; top = 1;
+        for vj=v(v<=w)
+           newtop = min(top+vj,w+1);
+           hi = min(vj,w+1)+1:newtop;
+           lo = 1:length(hi);
+        
+           C(hi) = C(hi) + C(lo);
+           top = newtop;
+        end
+        C = C / (2^n);
+        P(i) = sum(C); % Get tail probability
+    end
+%}
     t = toc(tc);
     disp(['statsrexactMat t=' num2str(t)]);
 end
