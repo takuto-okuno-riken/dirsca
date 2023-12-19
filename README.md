@@ -4,7 +4,15 @@
 Directional SCA (Seed-based connectivity analysis) and Functional flat mapping toolbox for MATLAB
 
 ## Introduction
-TODO:
+Estimation of the directionality of functional connectivity (FC) could help to elucidate more brain functions.
+We developed a novel directional seed-based connectivity analysis (SCA) of resting-state fMRI data based on normalized pairwise Granger causality.
+We evaluated its performance with 145 retrograde tracer injections in the left cortex of common marmoset, used as ground truth cellular connectivity on a voxel-by-voxel basis. 
+The ROC curve was calculated for each injection, and surprisingly the AUC (Area Under the ROC Curve) became 0.95 for non-directional and 0.942 for directional SCA in higher cell number threshold case.
+<div align="center">
+<img src="data/figure1.jpg" height="480">
+</div>
+Our novel directional SCA visualized with functional flat mapping accurately reflected cellular connections, demonstrating a new paradigm for whole-brain functional analysis.<br>
+<br>
 
 <b>Command line tools</b>
 
