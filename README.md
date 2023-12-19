@@ -45,6 +45,34 @@ This demo plots functional flat mapping of the human DMN:
 <img src="data/demo1.jpg" height="480">
 </div>
 
+##
+<b>Demo 2</b><br>
+The second demo shows performing directional (-d option) and non-directional (-n option) SCA of full voxel (-f option, 4mm isotropic cube)
+with pre-processed human resting state fMRI image (standard MNI space) files.<br>
+First 10 frames are removed, gaussian kernel smoothing (FWHM=3.4 voxels each) is applied, Global Mean (GM) and aCompCor nuisance factor removal is applied for denoising process.
+Parallel processing is used for the calculation with 10 working pools.<br>
+(Caution: Data for this demo is not included in the toolbox. Please use your own pre-processed human subjects fMRI data.)
+~~~
+>> dirsca -d -n -f --rmframe 10 --smooth 3.4 3.4 3.4 --nui gmacomp --pool 10 human_rest_sbj1.nii.gz human_rest_sbj2.nii.gz
+load SCA target voxels : data/human_2mm_cubeRoi2.nii.gz
+load CSF mask : data/human_2mm_csf.nii.gz
+load white matter mask : data/human_2mm_wm.nii.gz
+load whole brain mask : data/human_2mm_brain_mask.nii.gz
+processing : human_rest_sbj1
+remove first 10 frames.
+apply gaussian kernel smoothing [3.4 3.4 3.4] voxels.
+apply nuisance factor removal (gmacomp)
+process Mixed-Effects correlation ...
+...
+done t=212.2082sec
+saving results/nondir-human_2mm_cubeRoi2-full-r10-s3.4-3.4-3.4-gmacomp-human_rest_sbj1.mat
+process Mixed-Effects Pairwise Granger causality estimation ...
+...
+
+~~~
+Second level (group level) analysis result of full voxel functional connectivity matrix (24860 x 24860) is saved in "results/nondir-human_2mm_cubeRoi2-full-r10-s3.4-3.4-3.4-gmacomp-human_rest_sbj1.mat" (non directional)
+and "results/dir-human_2mm_cubeRoi2-full-r10-s3.4-3.4-3.4-gmacomp-human_rest_sbj1.mat" (directional). In each mat file, "T2" matrix is non-directional SCA result, and "Z2" matrix is directional SCA result.
+
 
 ## Command Line Tools Reference
 <b>dirsca command</b><br>
