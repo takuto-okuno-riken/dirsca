@@ -76,7 +76,9 @@ This demo plots second level (group level) analysis result of full voxel functio
 </div>
 
 Second level (group level) analysis result of full voxel functional connectivity matrix (24860 x 24860) is saved in "results/nondir-human_2mm_cubeRoi2-full-r10-s3.4-3.4-3.4-gmacomp-human_rest_sbj1.mat" (non directional)
-and "results/dir-human_2mm_cubeRoi2-full-r10-s3.4-3.4-3.4-gmacomp-human_rest_sbj1.mat" (directional). In each mat file, "T2" matrix is non-directional SCA result, and "Z2" matrix is directional SCA result.
+and "results/dir-human_2mm_cubeRoi2-full-r10-s3.4-3.4-3.4-gmacomp-human_rest_sbj1.mat" (directional). In each mat file, "T2" matrix is non-directional SCA result, and "Z2" matrix is directional SCA result.<br>
+First level (individual level) analsys result is saved in "results/cache" directory. For example, "cache-corr-human_2mm_cubeRoi2-full-r10-s3.4-3.4-3.4-gmacomp-human_rest_sbj1-1.mat" (non directional) contains
+top right matrix elements of correlation coefficients for one subject.
 
 
 ## Command Line Tools Reference
