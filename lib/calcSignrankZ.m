@@ -18,7 +18,8 @@ function Z = calcSignrankZ(X, method)
         P = statsrexactMat(tie_rank, W);
         P(P>1) = 1;
 		P = 2 * P;
-        Z = norminv(1-P/2);
+        Z = norminv(P/2); % 1-P/2 does not work if P=1e-16. it becomes inf.
+        Z = -Z; % flip sign
         % Z == 0 is twice high. replace it by approximated value
         idx = find(Z==0);
         % get sign
