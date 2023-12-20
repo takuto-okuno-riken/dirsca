@@ -171,7 +171,7 @@ function processInputFiles(handles)
     otherwise, cmap = parula;
     end
 
-    % 1st and 2nd level non-directional SCA
+    % read input files
     for i = 1:length(handles.inFiles)
         % load result mat files
         argv = handles.inFiles{i};

@@ -1,24 +1,24 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-success.svg)](https://opensource.org/licenses/MIT)
 
 # DirSCA and FFM toolbox
-Directional SCA (Seed-based connectivity analysis) and Functional flat mapping toolbox for MATLAB
+Directed SCA (Seed-based connectivity analysis) and Functional flat mapping toolbox for MATLAB
 
 ## Introduction
 Estimation of the directionality of functional connectivity (FC) could help to elucidate more brain functions.
-We developed a novel directional seed-based connectivity analysis (SCA) of resting-state fMRI data based on normalized pairwise Granger causality.
+We developed a novel directed seed-based connectivity analysis (SCA) of resting-state fMRI data based on normalized pairwise Granger causality.
 We evaluated its performance with 145 retrograde tracer injections in the left cortex of common marmoset, used as ground truth cellular connectivity on a voxel-by-voxel basis. 
-The ROC curve was calculated for each injection, and surprisingly the AUC (Area Under the ROC Curve) became 0.95 for non-directional and 0.942 for directional SCA in higher cell number threshold case.
+The ROC curve was calculated for each injection, and surprisingly the AUC (Area Under the ROC Curve) became 0.95 for undirected and 0.942 for directed SCA in higher cell number threshold case.
 <div align="center">
 <img src="data/figure1.jpg" height="480">
 </div>
-Our novel directional SCA visualized with functional flat mapping accurately reflected cellular connections, demonstrating a new paradigm for whole-brain functional analysis.<br>
+Our novel directed SCA visualized with functional flat mapping accurately reflected cellular connections, demonstrating a new paradigm for whole-brain functional analysis.<br>
 <br>
 
 <b>Command line tools</b>
 
 | name | description |
 |:---|:---|
-| dirsca | Calculate directional and non-directional Seed-based connectivity analysis. |
+| dirsca | Calculate directed and undirected Seed-based connectivity analysis. |
 | flatmap | Plot functional flat mapping. |
 | plotsca | Plot SCA result with background image.|
 
@@ -55,7 +55,7 @@ This demo plots functional flat mapping of the human DMN:
 
 ##
 <b>Demo 2</b><br>
-The second demo shows performing directional (-d option) and non-directional (-n option) SCA of full voxel (-f option, 4mm isotropic cube)
+The second demo shows performing directed (-d option) and undirected (-n option) SCA of full voxel (-f option, 4mm isotropic cube)
 with pre-processed human resting state fMRI image (standard MNI space) files.<br>
 First 10 frames are removed, gaussian kernel smoothing (FWHM=3.4 voxels each) is applied, Global Mean (GM) and aCompCor nuisance factor removal is applied for denoising process.
 Parallel processing is used for the calculation with 10 working pools.<br>
@@ -83,9 +83,9 @@ This demo plots second level (group level) analysis result of full voxel functio
 <img src="data/demo2.jpg" height="320">
 </div>
 
-Second level (group level) analysis result of full voxel functional connectivity matrix (24860 x 24860) is saved in "results/nondir-human_2mm_cubeRoi2-full-r10-s3.4-3.4-3.4-gmacomp-human_rest_sbj1.mat" (non directional)
-and "results/dir-human_2mm_cubeRoi2-full-r10-s3.4-3.4-3.4-gmacomp-human_rest_sbj1.mat" (directional). In each mat file, "T2" matrix is non-directional SCA result, and "Z2" matrix is directional SCA result.<br>
-First level (individual level) analsys result is saved in "results/cache" directory. For example, "cache-corr-human_2mm_cubeRoi2-full-r10-s3.4-3.4-3.4-gmacomp-human_rest_sbj1-1.mat" (non directional) contains
+Second level (group level) analysis result of full voxel functional connectivity matrix (24860 x 24860) is saved in "results/nondir-human_2mm_cubeRoi2-full-r10-s3.4-3.4-3.4-gmacomp-human_rest_sbj1.mat" (undirected)
+and "results/dir-human_2mm_cubeRoi2-full-r10-s3.4-3.4-3.4-gmacomp-human_rest_sbj1.mat" (directed). In each mat file, "T2" matrix is undirected SCA result, and "Z2" matrix is directed SCA result.<br>
+First level (individual level) analsys result is saved in "results/cache" directory. For example, "cache-corr-human_2mm_cubeRoi2-full-r10-s3.4-3.4-3.4-gmacomp-human_rest_sbj1-1.mat" (undirected) contains
 top right matrix elements of correlation coefficients for one subject.
 
 
@@ -94,8 +94,8 @@ top right matrix elements of correlation coefficients for one subject.
 ~~~
 >> dirsca -h
 usage: dirsca [options][-d][-n][-f][-s seed.nii.gz] file1.nii.gz ...
-  -d                  perform directional seed-based connectivity analysis
-  -n                  perform non-directional seed-based connectivity analysis
+  -d                  perform directed seed-based connectivity analysis
+  -n                  perform undirected seed-based connectivity analysis
   -f, --full          full voxel connectivity analysis
   -s, --seed file     NIfTI <file> of seed ROI voxels
   --compseed          seed is 4D component file
@@ -110,8 +110,8 @@ usage: dirsca [options][-d][-n][-f][-s seed.nii.gz] file1.nii.gz ...
   --nuiwm file        white matter mask NIfTI <file> for wm-mean of nuisance factor removal (default: data/human_2mm_wm.nii.gz)
   --nuicsf file       csf mask NIfTI <file> for csf-mean of nuisance factor removal (default: data/human_2mm_csf.nii.gz)
   --highpass freq     high-pass NIfTI <freq> Hz (default: off)
-  --lags num          spot time lag for directional SCA (default: auto)
-  --rankmeth type     ranking method for directional SCA (default: "exact")
+  --lags num          spot time lag for directed SCA (default: auto)
+  --rankmeth type     ranking method for directed SCA (default: "exact")
   --outpath path      output files <path> (default:"results")
   --cachepath path    cache path <path> (default:"results/cache")
   --showsig           show processed time-series of input NIfTI file
@@ -146,5 +146,5 @@ The input files should be NIfTI format.
 If you find DirSCA and FFM Toolbox useful in your research, please cite it as follows: 
 
 Takuto Okuno, Junichi Hata, Hideyuki Okano, Alexander Woodward (in submission)
-["Directional and non-directional seed-based connectivity analysis of resting-state fMRI in the human and marmoset"](https://www.yahoo.com/), in submission
+["A Novel Directed Seed-Based Connectivity Analysis Toolbox applied to human and marmoset resting-state fMRI"](https://www.yahoo.com/), in submission
 

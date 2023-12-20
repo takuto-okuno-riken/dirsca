@@ -1,5 +1,5 @@
 %%
-% directional and non-direcional SCA command line tool
+% directed and undirected SCA command line tool
 
 function dirsca(varargin)
 
@@ -146,7 +146,7 @@ function dirsca(varargin)
         showUsage();
         return;
     elseif handles.dir == 0 && handles.nondir == 0
-        disp('Please specify directional and/or non-directional analysis')
+        disp('Please specify directed and/or undirected analysis')
         showUsage();
         return;
     elseif (isempty(handles.niiFiles) && isempty(handles.listFile)) || (handles.full==0 && isempty(handles.seedFile)) || (isempty(handles.atlasFile) && isempty(handles.maskFile))
@@ -166,8 +166,8 @@ function showUsage()
     global exeName;
     
     disp(['usage: ' exeName ' [options][-d][-n][-f][-s seed.nii.gz] file1.nii.gz ...']);
-    disp('  -d                  perform directional seed-based connectivity analysis');
-    disp('  -n                  perform non-directional seed-based connectivity analysis');
+    disp('  -d                  perform directed seed-based connectivity analysis');
+    disp('  -n                  perform undirected seed-based connectivity analysis');
     disp('  -f, --full          full voxel connectivity analysis');
     disp('  -s, --seed file     NIfTI <file> of seed ROI voxels');
     disp('  --compseed          seed is 4D component file');
@@ -182,8 +182,8 @@ function showUsage()
     disp('  --nuiwm file        white matter mask NIfTI <file> for wm-mean of nuisance factor removal (default: data/human_2mm_wm.nii.gz)');
     disp('  --nuicsf file       csf mask NIfTI <file> for csf-mean of nuisance factor removal (default: data/human_2mm_csf.nii.gz)');
     disp('  --highpass freq     high-pass NIfTI <freq> Hz (default: off)');
-    disp('  --lags num          spot time lag for directional SCA (default: auto)');
-    disp('  --rankmeth type     ranking method for directional SCA (default: "exact")');
+    disp('  --lags num          spot time lag for directed SCA (default: auto)');
+    disp('  --rankmeth type     ranking method for directed SCA (default: "exact")');
     disp('  --outpath path      output files <path> (default:"results")');
     disp('  --cachepath path    cache path <path> (default:"results/cache")');
     disp('  --showsig           show processed time-series of input NIfTI file');
@@ -465,7 +465,7 @@ function processInputFiles(handles)
 
     idStr = [atlasName '-' seedName '-r' num2str(handles.rmframe) smstr nstr '-' names{1}];
 
-    % 1st and 2nd level non-directional SCA
+    % 1st and 2nd level undirected SCA
     if handles.nondir > 0
         ndscaT2 = [handles.outpath '/nondir-' idStr '.mat'];
         if exist(ndscaT2,'file')
@@ -511,11 +511,11 @@ function processInputFiles(handles)
         T2(T2<-1e+3) = -Inf; % treat as -Inf
 
         figure; imagesc(log10(abs(T2))); colorbar;
-        title(['non-directional SCA result (log10(|T-value|) matrix) of ' names{1}]);
+        title(['undirected SCA result (log10(|T-value|) matrix) of ' names{1}]);
         xlabel('Seed ROIs'); ylabel('Target voxels'); colorbar;
     end
 
-    % 1st and 2nd level directional SCA
+    % 1st and 2nd level directed SCA
     if handles.dir > 0
         dscaZ2 = [handles.outpath '/dir-' idStr '.mat'];
         if exist(dscaZ2,'file')
@@ -532,7 +532,7 @@ function processInputFiles(handles)
                 end
             end
 
-            % calc directional SCA
+            % calc directed SCA
             delete(gcp('nocreate')); % shutdown pools
             if handles.poolnum > 0, parpool(handles.poolnum); end % set pool num
             [G2, RSS2, ~, df, Z2] = calcSeedPGCMixed(CX, CS, handles.lags, true, handles.cachepath, idStr, handles.rankmeth);
@@ -543,7 +543,7 @@ function processInputFiles(handles)
         end
     
         figure; imagesc(Z2); colorbar;
-        title(['directional SCA result (Z2 matrix) of ' names{1}]);
+        title(['directed SCA result (Z2 matrix) of ' names{1}]);
         xlabel('Source (Seed) voxels'); ylabel('Target voxels'); colorbar;
     end
 end
