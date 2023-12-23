@@ -26,7 +26,9 @@ function flatmap(varargin)
     handles.commandError = 0;
     handles.inFiles = {};
     handles.atlasFile = 'data/human_2mm_cubeRoi2.nii.gz';
+    handles.operation = 'mean';
     handles.maskFile = [];
+    handles.roinameFile = [];
     handles.flatmapFile = 'data/human_ffm_cubeRoi2.mat';
     handles.range = [];
     handles.cmap = '';
@@ -45,6 +47,12 @@ function flatmap(varargin)
                 i = i + 1;
             case {'--mask'}
                 handles.maskFile = varargin{i+1};
+                i = i + 1;
+            case {'--atlasop'}
+                handles.operation = varargin{i+1};
+                i = i + 1;
+            case {'--roiname'}
+                handles.roinameFile = varargin{i+1};
                 i = i + 1;
             case {'--flatmap'}
                 handles.flatmapFile = varargin{i+1};
@@ -106,7 +114,9 @@ function showUsage()
     disp(['usage: ' exeName ' [options] file1.nii.gz ...']);
     disp('  --atlas file        NIfTI <file> of target ROI voxels (default: data/human_2mm_cubeRoi2.nii.gz)');
     disp('  --mask file         NIfTI <file> of target mask (full voxel) (Preferred over atlas option)');
-    disp('  --flatmap file      functional flat map definition <file>(default: data/human_ffm_cubeRoi2.mat)');
+    disp('  --atlasop method    atlas ROI signal extraction <method> (default: "mean"');
+    disp('  --roiname file      atlas ROI name list <file>');
+    disp('  --flatmap file      functional flat map definition <file> (default: data/human_ffm_cubeRoi2.mat)');
     disp('  --range min max     T-value/Z-score color range for image plot');
     disp('  --cmap type         color map type for image plot (default: "hot")');
     disp('  --cmap type         color map type for image plot (default: "hot")');
@@ -163,11 +173,23 @@ function processInputFiles(handles)
     end
     isRtoL = false; % volume is adjusted already
 
+    % load ROI name
+    ROIs = {};
+    if ~isempty(handles.roinameFile)
+        if ~exist(handles.roinameFile,'file')
+            disp(['ROI name file is not found : ' handles.roinameFile]);
+            return;
+        end
+        disp(['load ROI name file : ' handles.roinameFile]);
+        load(handles.roinameFile);
+    end
+
     % set colormap
     switch handles.cmap
     case 'hot', cmap = hot;
     case 'jet', cmap = jet;
     case 'turbo', cmap = turbo;
+    case 'hsv', cmap = hsv;
     otherwise, cmap = parula;
     end
 
@@ -191,7 +213,7 @@ function processInputFiles(handles)
             V = adjustVolumeDir(V,info);
             V(isnan(V)) = 0;
 
-            figure; crange = plotNifti3Dflatmap(V, atlasV, ismask, reduction, 10, handles.range, cmap, handles.backdot, handles.backgr);
+            figure; crange = plotNifti3Dflatmap(V, atlasV, ismask, reduction, 10, handles.range, cmap, handles.backdot, handles.backgr, handles.operation, ROIs);
             title([name]); colorbar;
             disp(['color range=[' num2str(crange(1)) ' ' num2str(crange(2)) ']']);
         end

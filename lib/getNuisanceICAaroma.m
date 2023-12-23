@@ -29,6 +29,7 @@ function [Xn, ICt, idxs] = getNuisanceICAaroma(TR, csfV, egV, outV, M, Md, icaPa
     disp(['loading : ' compf]);
     compinfo = niftiinfo(compf);
     IC = single(niftiread(compinfo));
+    IC = adjustVolumeDir(IC, compinfo);
 
     % read ICA component time series for ICA-AROMA
     comptf = [icaPath '/melodic_mix'];

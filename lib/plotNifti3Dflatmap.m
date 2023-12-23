@@ -10,8 +10,12 @@
 %  cmap         color map for V (default: hot)
 %  zeroColor    group 'zero' color (default: [])
 %  bkColor      background color (default: [0 0 0])
+%  operation    operation for each plane ('mode','max','min','mean'(default),'median')
+%  roiname      cells of ROI name (default: {})
 
-function crange = plotNifti3Dflatmap(V, maskV, isFullVoxel, flatXY, gRate, crange, cmap, zeroColor, bkColor)
+function crange = plotNifti3Dflatmap(V, maskV, isFullVoxel, flatXY, gRate, crange, cmap, zeroColor, bkColor, operation, roiname)
+    if nargin < 11, roiname = {}; end
+    if nargin < 10, operation = 'mean'; end
     if nargin < 9, bkColor = [0 0 0]; end
     if nargin < 8, zeroColor = []; end
     if nargin < 7, cmap = hot; end
@@ -32,7 +36,7 @@ function crange = plotNifti3Dflatmap(V, maskV, isFullVoxel, flatXY, gRate, crang
             mIdx = find(maskV(:) > 0);
             Vidx = V(mIdx);
         else
-            Vidx = getRoiTSFromNifti4D(V, maskV, 'mean');
+            Vidx = getRoiTSFromNifti4D(V, maskV, operation);
         end
     end
 
@@ -64,6 +68,20 @@ function crange = plotNifti3Dflatmap(V, maskV, isFullVoxel, flatXY, gRate, crang
         if col < 1, col = 1; end
         if col > clen, col = clen; end
         clr(i,:) = cmap(col,:);
+    end
+
+    % ROI names
+    if ~isempty(roiname)
+        RG=cell(length(Vidx),1);
+        for i=1:length(Vidx)
+            id = floor(Vidx(i)/gRate);
+            if ~isnan(id) && id > 0 && id <= size(roiname,1)
+                RG{i}=roiname{id,1};
+            else
+                RG{i}='nan';
+            end
+        end
+        Vidx = RG;
     end
 
     % show plot
