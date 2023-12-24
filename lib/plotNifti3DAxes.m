@@ -7,14 +7,14 @@
 %  cmap         color map for V (default: parula)
 %  backV        3D background volume (default: [])
 %  backcmap     color map for backV (default: gray)
-%  isRtoL       X axis is right to left (default: true)
+%  isRtoL       X axis is right to left (default: false)
 %  bRate        background color rate (default: 0.3)
 %  fRate        front color rate (default: 0.8)
 
 function plotNifti3DAxes(V, operation, range, cmap, backV, backcmap, isRtoL, bRate, fRate)
     if nargin < 9, fRate = 0.8; end
     if nargin < 8, bRate = 0.3; end
-    if nargin < 7, isRtoL = true; end
+    if nargin < 7, isRtoL = false; end
     if nargin < 6, backcmap = gray; end
     if nargin < 5, backV = []; end
     if nargin < 4, cmap = parula; end
