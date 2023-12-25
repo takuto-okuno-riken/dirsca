@@ -97,7 +97,7 @@ process Mixed-Effects Pairwise Granger causality estimation ...
 ~~~
 This demo plots second level (group level) analysis result of full voxel functional connectivity matrix (24860 x 24860):
 <div align="center">
-<img src="data/demo2.jpg" height="320">
+<img src="data/demo3.jpg" height="320">
 </div>
 
 Second level (group level) analysis result of full voxel functional connectivity matrix (24860 x 24860) is saved in "results/nondir-human_2mm_cubeRoi2-full-r10-s3.4-3.4-3.4-gmacomp-human_rest_sbj1.mat" (undirected)
