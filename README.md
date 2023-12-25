@@ -1,7 +1,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-success.svg)](https://opensource.org/licenses/MIT)
 
 # DirSCA and FFM toolbox
-Directed SCA (Seed-based connectivity analysis) and Functional flat mapping toolbox for MATLAB
+Directed SCA (Seed-based connectivity analysis) and Functional flat mapping (FFM) toolbox for MATLAB
 
 ## Introduction
 Estimating the direction of functional connectivity (FC) could help to further elucidate complex brain function.
@@ -11,7 +11,7 @@ The ROC curve was calculated for each injection, and the AUC (Area Under the ROC
 <div align="center">
 <img src="data/figure1.jpg" height="480">
 </div>
-Our novel directed SCA method, visualized with functional flat mapping, accurately reflects cellular connections, demonstrating a new paradigm for whole-brain functional analysis.<br>
+Our novel directed SCA method, visualized with functional flat mapping (FFM), accurately reflects cellular connections, demonstrating a new paradigm for whole-brain functional analysis.<br>
 <br>
 
 <b>Command line tools</b>
