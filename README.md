@@ -39,7 +39,7 @@ Please download the [VARDNN Toolbox](https://github.com/takuto-okuno-riken/vardn
 
 ## Command Line Tools Demos
 <b>Demo 1</b><br>
-The first demo shows plotting functional flat mapping of a human default mode network (DMN) component calculated by group ICA.<br>
+The first demo shows functional flat mapping of a human default mode network (DMN) component calculated by group ICA.<br>
 (Copy and paste this command line. Demo data is included in DirSCA and FFM Toolbox.)
 ~~~
 >> flatmap data/zstat_DMN.nii.gz --cmap hot --backdot 0.1 0.1 0.1
@@ -55,6 +55,23 @@ This demo plots functional flat mapping of the human DMN:
 
 ##
 <b>Demo 2</b><br>
+This demo shows functional flat mapping of a Conn atlas ROIs.<br>
+(Copy and paste this command line. Demo data is included in DirSCA and FFM Toolbox.)
+~~~
+>> flatmap data/human_2mm_atlas.nii.gz --cmap hsv --backgr 1 1 1 --atlasop mode --roiname data/human_atlas_roiname.mat
+load functional flat map definition : data/human_ffm_cubeRoi2.mat
+load voxel mask : data/human_2mm_cubeRoi2.nii.gz
+load ROI name file : data/human_atlas_roiname.mat
+read NIfTI file : human_2mm_atlas
+color range=[0 132]
+~~~
+FFM dot can be selected by click and showed its ROI name. Then, you can visually confirm relation between dots and ROIs.
+<div align="center">
+<img src="data/demo2.jpg" height="480">
+</div>
+
+##
+<b>Demo 3</b><br>
 The second demo shows performing directed (-d option) and undirected (-n option) SCA of full voxel (-f option, 4mm isotropic cube)
 with pre-processed human resting state fMRI image (standard MNI space) files.<br>
 First 10 frames are removed, gaussian kernel smoothing (FWHM=3.4 voxels each) is applied, Global Mean (GM) and aCompCor nuisance factor removal is applied for denoising process.
