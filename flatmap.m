@@ -114,11 +114,10 @@ function showUsage()
     disp(['usage: ' exeName ' [options] file1.nii.gz ...']);
     disp('  --atlas file        NIfTI <file> of target ROI voxels (default: data/human_2mm_cubeRoi2.nii.gz)');
     disp('  --mask file         NIfTI <file> of target mask (full voxel) (Preferred over atlas option)');
-    disp('  --atlasop method    atlas ROI signal extraction <method> (default: "mean"');
+    disp('  --atlasop method    atlas ROI signal extraction <method> (default: "mean")');
     disp('  --roiname file      atlas ROI name list <file>');
     disp('  --flatmap file      functional flat map definition <file> (default: data/human_ffm_cubeRoi2.mat)');
     disp('  --range min max     T-value/Z-score color range for image plot');
-    disp('  --cmap type         color map type for image plot (default: "hot")');
     disp('  --cmap type         color map type for image plot (default: "hot")');
     disp('  --backdot r g b     background dot color (default: [])');
     disp('  --backgr r g b      background color (default: 0 0 0)');
