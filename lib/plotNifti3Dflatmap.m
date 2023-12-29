@@ -71,6 +71,7 @@ function crange = plotNifti3Dflatmap(V, maskV, isFullVoxel, flatXY, gRate, crang
     end
 
     % ROI names
+    nanIdx = nan;
     if ~isempty(roiname)
         RG=cell(length(Vidx),1);
         for i=1:length(Vidx)
@@ -79,14 +80,22 @@ function crange = plotNifti3Dflatmap(V, maskV, isFullVoxel, flatXY, gRate, crang
                 RG{i}=roiname{id,1};
             else
                 RG{i}='nan';
+                if isnan(nanIdx), nanIdx = i; end
             end
         end
         Vidx = RG;
+        % get nan index for group color
+        if nanIdx > 1
+            u = unique(RG(1:nanIdx-1));
+            nanIdx = length(u) + 1;
+        end
     end
 
     % show plot
-    if ~isempty(zeroColor), clr(1,:) = zeroColor; % might be 0 group
-    else, clr(1,:) = clr(2,:); end
+    if ~isempty(zeroColor)
+        if nanIdx > 0, clr(nanIdx,:) = zeroColor;
+        else, clr(1,:) = zeroColor; end % might be 0 group
+    end
     colormap(cmap);
     gscatter(flatXY(:,1),flatXY(:,2),Vidx,clr);
     set(gca,'Color',bkColor);
