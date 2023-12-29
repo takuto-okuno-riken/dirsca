@@ -148,9 +148,10 @@ Calculation result will be saved in <outpath>.
 usage: flatmap [options] file1.nii.gz ...
   --atlas file        NIfTI <file> of target ROI voxels (default: data/human_2mm_cubeRoi2.nii.gz)
   --mask file         NIfTI <file> of target mask (full voxel) (Preferred over atlas option)
-  --flatmap file      functional flat map definition <file>(default: data/human_ffm_cubeRoi2.mat)
+  --atlasop method    atlas ROI signal extraction <method> (default: "mean")
+  --roiname file      atlas ROI name list <file>
+  --flatmap file      functional flat map definition <file> (default: data/human_ffm_cubeRoi2.mat)
   --range min max     T-value/Z-score color range for image plot
-  --cmap type         color map type for image plot (default: "hot")
   --cmap type         color map type for image plot (default: "hot")
   --backdot r g b     background dot color (default: [])
   --backgr r g b      background color (default: 0 0 0)
