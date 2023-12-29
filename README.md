@@ -58,7 +58,7 @@ This demo plots functional flat mapping of the human DMN:
 This demo shows functional flat mapping of a Conn atlas ROIs.<br>
 (Copy and paste this command line. Demo data is included in DirSCA and FFM Toolbox.)
 ~~~
->> flatmap data/human_2mm_atlas.nii.gz --cmap hsv --backgr 1 1 1 --atlasop mode --roiname data/human_atlas_roiname.mat
+>> flatmap data/human_2mm_atlas.nii.gz --cmap hsv --backgr 1 1 1 --atlasop mode --roiname data/human_atlas_roiname.mat --backdot 0.9 0.9 0.9
 load functional flat map definition : data/human_ffm_cubeRoi2.mat
 load voxel mask : data/human_2mm_cubeRoi2.nii.gz
 load ROI name file : data/human_atlas_roiname.mat
