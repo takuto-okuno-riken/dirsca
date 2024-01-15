@@ -4,7 +4,7 @@
 Directed SCA (Seed-based connectivity analysis) and Functional flat mapping (FFM) toolbox for MATLAB
 
 ## Introduction
-Estimating the direction of functional connectivity (FC) could help to further elucidate complex brain function.
+Estimating the direction of functional connectivity (FC) can help to further elucidate complex brain function.
 We developed a novel directed seed-based connectivity analysis (SCA) method based on normalized pairwise Granger causality.
 We evaluated its performance against 145 retrograde tracer injections in the left cortex of common marmoset that were used as ground truth cellular connectivity on a voxel-by-voxel basis. 
 The ROC curve was calculated for each injection, and the AUC (Area Under the ROC Curve) became 0.95 for undirected and 0.942 for directed SCA in higher cell number threshold case.
