@@ -20,7 +20,6 @@ Our novel directed SCA method, visualized with functional flat mapping (FFM), ac
 |:---|:---|
 | dirsca | Calculate directed and undirected Seed-based connectivity analysis. |
 | flatmap | Plot functional flat mapping. |
-| plotsca | Plot SCA result with background image.|
 
 ## Requirements: Software
 * MATLAB R2019b or later
@@ -164,5 +163,5 @@ The input files should be NIfTI format.
 If you find DirSCA and FFM Toolbox useful in your research, please cite it as follows: 
 
 Takuto Okuno, Junichi Hata, Hideyuki Okano, Alexander Woodward (in submission)
-["A Novel Directed Seed-Based Connectivity Analysis Toolbox applied to human and marmoset resting-state fMRI"](https://www.yahoo.com/), in submission
+["A Novel Directed Seed-Based Connectivity Analysis Toolbox Applied to Human and Marmoset Resting-State fMRI"](https://www.yahoo.com/), in submission
 
