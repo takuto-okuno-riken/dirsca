@@ -10,8 +10,10 @@
 %  cachePath   path for cache files (optional)
 %  cacheID     cache identifier (optional)
 %  method      Z score estimation, exact or approximate (default:'')
+%  isNorm      using normalized pairwise Granger causality
 
-function [G2, RSS2, T2, df, Z2] = calcSeedPGCMixed(CY, CS, lags, isSpot, cachePath, cacheID, method)
+function [G2, RSS2, T2, df, Z2] = calcSeedPGCMixed(CY, CS, lags, isSpot, cachePath, cacheID, method, isNorm)
+    if nargin < 8, isNorm = true; end
     if nargin < 7, method = ''; end
     if nargin < 6, cacheID = []; end
     if nargin < 5, cachePath = []; end
@@ -25,7 +27,8 @@ function [G2, RSS2, T2, df, Z2] = calcSeedPGCMixed(CY, CS, lags, isSpot, cachePa
 
     % to struct from memory or file name
     CY = toStructCells(CY);
-    if ~isempty(CS), CS = toStructCells(CS); else, CS = CY; end
+    isempCS = isempty(CS);
+    if ~isempCS, CS = toStructCells(CS); else, CS = CY; end
 
     roinum = size(CY{1}.X,2);
     srcnum = size(CS{1}.X,2);  % seed voxels for Granger Causality
@@ -54,19 +57,27 @@ function [G2, RSS2, T2, df, Z2] = calcSeedPGCMixed(CY, CS, lags, isSpot, cachePa
             y = Y(lags+1:end,k);
             X2 = [];
             for p=1:ed
-                X2 = [X2, Y(p:end-lags+(p-1),k)]; %, ones(size(Y,1)-1,1)]; % might not be good to add bias
+                X2 = [X2, Y(p:end-lags+(p-1),k)];
+            end
+            if ~isNorm
+                X2 = [X2, ones(size(Y,1)-lags,1)]; % might not be good to add bias
             end
             for i=1:srcnum
-                if k==i
+                if k==i && isempCS
                     continue;
                 end
                 X1 = [];
                 for p=1:ed
-                    X1 = [X1, Z(p:end-lags+(p-1),i)]; %, ones(size(Y,1)-1,1)]; % might not be good to add bias
+                    X1 = [X1, Z(p:end-lags+(p-1),i)];
                 end
-                [~, r1] = regressLinear(y,X1);
-                [~, r2] = regressLinear(y,[X1, X2]);
                 % F = ((RSS1 - RSS2) / (p2 - p1)) / (RSS2 / n - p2)
+                if isNorm
+                    [~, r1] = regressLinear(y,X1);
+                    [~, r2] = regressLinear(y,[X1, X2]);
+                else
+                    [~, r1] = regressLinear(y,X2);
+                    [~, r2] = regressLinear(y,[X2, X1]);
+                end
                 RSS1(k,i) = r1'*r1;  % p1 = p
                 RSS2(k,i) = r2'*r2;  % p2 = 2*p
             end
@@ -78,12 +89,17 @@ function [G2, RSS2, T2, df, Z2] = calcSeedPGCMixed(CY, CS, lags, isSpot, cachePa
         D3 = RSS1 ./ RSS2;
         RSS1 = []; RSS2 = []; % clear memory
 %        D3(RSS1==0&RSS2==0) = 0; % # / 0 -> inf, % 0 / 0 case should be 0 (not NaN)
-        DN = repmat(nanmean(D3,2),[1 srcnum]);
-        G3 = D3 ./ DN;
-        D3 = []; DN = []; % clear memory
-        G3 = -log(G3); % to center zero (and flip)
-%        G3 = 1 - G3; % to center zero (and flip)
-%        G3(D3==0&DN==0) = 0; % 0 / 0 case should be 0 (not NaN)
+        if isNorm
+            DN = repmat(nanmean(D3,2),[1 srcnum]);
+            G3 = D3 ./ DN;
+            D3 = []; DN = []; % clear memory
+            G3 = -log(G3); % to center zero (and flip)
+    %        G3 = 1 - G3; % to center zero (and flip)
+    %        G3(D3==0&DN==0) = 0; % 0 / 0 case should be 0 (not NaN)
+        else
+            G3 = log(D3);
+            D3 = []; % clear memory
+        end
 
         if ~isempty(cachePath)
             CG3{j} = saveSeedPGCCache(cachePath,cacheID,lags,isSpot,j,G3);
