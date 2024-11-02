@@ -4,7 +4,7 @@
 % input:
 %  V            nifti 4D volume (X x Y x Z x frames)
 %  atlasV       nifti 3D atlas (X x Y x Z)
-%  operation    operation for each plane ('mode'(default),'max','min','mean','median')
+%  operation    operation for each plane ('mode'(default),'max','min','mean','median','sum')
 
 function X = getRoiTSFromNifti4D(V, atlasV, operation)
     if nargin < 3, operation = 'mode'; end
@@ -29,6 +29,8 @@ function X = getRoiTSFromNifti4D(V, atlasV, operation)
             m = nanmean(B,1);
         case 'median'
             m = nanmedian(B,1);
+        case 'sum'
+            m = nansum(B,'all');
         end
         X(i,:) = m;
     end

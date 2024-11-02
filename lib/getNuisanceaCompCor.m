@@ -36,9 +36,14 @@ function Xn = getNuisanceaCompCor(V, csfV, wmV, Sd, maskTh, compNum)
     end
 
     % get PCA time-series
-    Xn = nan(size(V,2),compNum*2);
-    [coeff,score,~,~,explained,mu] = pca(csfX'); % relation : X' == score * coeff.' + repmat(mu,size(score,1),1);
-    Xn(:,1:compNum) = score(:,1:compNum);
-    [coeff,score,~,~,explained,mu] = pca(wmX'); % relation : X' == score * coeff.' + repmat(mu,size(score,1),1);
-    Xn(:,(1+compNum):end) = score(:,1:compNum);
+    st = 1; ed = st+compNum-1; Xn = [];
+    if ~isempty(csfX)
+        [coeff,score,~,~,explained,mu] = pca(csfX'); % relation : X' == score * coeff.' + repmat(mu,size(score,1),1);
+        Xn(:,st:ed) = score(:,1:compNum);
+        st = 1+compNum; ed = st+compNum-1;
+    end
+    if ~isempty(wmX)
+        [coeff,score,~,~,explained,mu] = pca(wmX'); % relation : X' == score * coeff.' + repmat(mu,size(score,1),1);
+        Xn(:,st:ed) = score(:,1:compNum);
+    end
 end
