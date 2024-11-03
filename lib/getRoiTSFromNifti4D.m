@@ -30,7 +30,7 @@ function X = getRoiTSFromNifti4D(V, atlasV, operation)
         case 'median'
             m = nanmedian(B,1);
         case 'sum'
-            m = nansum(B,'all');
+            m = nansum(B,1);
         end
         X(i,:) = m;
     end
