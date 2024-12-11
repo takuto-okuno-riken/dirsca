@@ -162,6 +162,6 @@ The input files should be NIfTI format.
 ## Citing DirSCA and FFM toolbox
 If you find DirSCA and FFM Toolbox useful in your research, please cite it as follows: 
 
-Takuto Okuno, Junichi Hata, Hideyuki Okano, Alexander Woodward (in submission)
-["A Novel Directed Seed-Based Connectivity Analysis Toolbox Applied to Human and Marmoset Resting-State fMRI"](https://www.yahoo.com/), in submission
+Takuto Okuno, Junichi Hata, Hideyuki Okano, Alexander Woodward (2024)
+["A Novel Directed Seed-Based Connectivity Analysis Toolbox Applied to Human and Marmoset Resting-State fMRI"](https://www.jneurosci.org/content/44/45/e0389242024), J. Neurosci, 44 (45) e0389242024
 
